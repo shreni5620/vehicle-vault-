@@ -1,157 +1,100 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {Car, Users, Calendar, DollarSign, LogOut,Plus, Search, Filter, MoreVertical, Edit, Trash} from 'lucide-react';
+import React from 'react';
+import { Users, Car, FileText, TrendingUp, DollarSign, Star } from 'lucide-react';
 import "../assets/AdminDashboard.css";
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('vehicles');
-
   const stats = [
-    { icon: <Car size={24} />, label: 'Total Vehicles', value: '124' },
-    { icon: <Users size={24} />, label: 'Test Drives', value: '48' },
-    { icon: <Calendar size={24} />, label: 'Appointments', value: '12' },
-    { icon: <DollarSign size={24} />, label: 'Revenue', value: '$284,500' },
+    { icon: Users, label: 'Total Users', value: '1,234', change: '+12%' },
+    { icon: Car, label: 'Listed Vehicles', value: '456', change: '+8%' },
+    { icon: FileText, label: 'Total Bookings', value: '789', change: '+15%' },
+    { icon: DollarSign, label: 'Revenue', value: '$45,678', change: '+20%' },
   ];
 
-  const vehicles = [
-    {
-      id: 1,
-      name: '2024 BMW X5',
-      price: '$62,900',
-      status: 'Available',
-      lastUpdated: '2024-03-15'
-    },
-    {
-      id: 2,
-      name: '2024 Mercedes-Benz C-Class',
-      price: '$56,500',
-      status: 'Test Drive',
-      lastUpdated: '2024-03-14'
-    },
-    // Add more vehicles as needed
+  const recentBookings = [
+    { id: 1, user: 'John Doe', vehicle: 'Tesla Model 3', date: '2024-03-15', status: 'Confirmed' },
+    { id: 2, user: 'Jane Smith', vehicle: 'BMW X5', date: '2024-03-14', status: 'Pending' },
+    { id: 3, user: 'Mike Johnson', vehicle: 'Audi Q7', date: '2024-03-13', status: 'Completed' },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    navigate('/admin/login',{replace:true});
-  };
+  const topVehicles = [
+    { name: 'Tesla Model 3', bookings: 45, rating: 4.8 },
+    { name: 'BMW X5', bookings: 38, rating: 4.7 },
+    { name: 'Audi Q7', bookings: 32, rating: 4.6 },
+  ];
 
   return (
-    <div className="admin-dashboard">
-      {/* Sidebar */}
-      <aside className="dashboard-sidebar">
-        <div className="sidebar-header">
-          <h1>Vehicle Vault</h1>
-          <p>Admin Dashboard</p>
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <h1>Dashboard Overview</h1>
+        <p>Welcome back, Admin!</p>
+      </div>
+
+      <div className="stats-grid">
+        {stats.map((stat, index) => (
+          <div key={index} className="stat-card">
+            <div className="stat-card-header">
+              <stat.icon className="stat-icon" />
+              <span className="stat-change">{stat.change}</span>
+            </div>
+            <h3 className="stat-label">{stat.label}</h3>
+            <p className="stat-value">{stat.value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="dashboard-grid">
+        <div className="card">
+          <div className="card-header">
+            <h2 className="card-title">Recent Bookings</h2>
+            <TrendingUp className="card-icon" />
+          </div>
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Vehicle</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentBookings.map((booking) => (
+                  <tr key={booking.id}>
+                    <td>{booking.user}</td>
+                    <td>{booking.vehicle}</td>
+                    <td>{booking.date}</td>
+                    <td>
+                      <span className={`status-badge status-${booking.status.toLowerCase()}`}>
+                        {booking.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <nav className="sidebar-nav">
-          <button
-            className={`nav-item ${activeTab === 'vehicles' ? 'active' : ''}`}
-            onClick={() => setActiveTab('vehicles')}
-          >
-            <Car size={20} />
-            Vehicles
-          </button>
-          <button
-            className={`nav-item ${activeTab === 'test-drives' ? 'active' : ''}`}
-            onClick={() => setActiveTab('test-drives')}
-          >
-            <Calendar size={20} />
-            User
-          </button>
-          <button
-            className={`nav-item ${activeTab === 'customers' ? 'active' : ''}`}
-            onClick={() => setActiveTab('customers')}
-          >
-            <Users size={20} />
-            Customers
-          </button>
-        </nav>
-
-        <button className="logout-button" onClick={handleLogout}>
-          <LogOut size={20} />
-          Logout
-        </button>
-      </aside>
-
-      {/* Main Content */}
-      <main className="dashboard-main">
-        <div className="main-header">
-          <h2>Vehicle Management</h2>
-          <button className="add-vehicle-btn" onClick={()=> navigate("/add-vehicle")}>
-            <Plus size={20} />
-            Add New Vehicle
-          </button>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="stats-grid">
-          {stats.map((stat, index) => (
-            <div key={index} className="stat-card">
-              {stat.icon}
-              <div>
-                <h3>{stat.label}</h3>
-                <p>{stat.value}</p>
+        <div className="card">
+          <div className="card-header">
+            <h2 className="card-title">Top Performing Vehicles</h2>
+            <Star className="card-icon" />
+          </div>
+          {topVehicles.map((vehicle, index) => (
+            <div key={index} className="vehicle-item">
+              <div className="vehicle-info">
+                <h3>{vehicle.name}</h3>
+                <p>{vehicle.bookings} bookings</p>
+              </div>
+              <div className="vehicle-rating">
+                <Star className="rating-star" />
+                <span>{vehicle.rating}</span>
               </div>
             </div>
           ))}
         </div>
-
-        {/* Vehicles Table */}
-        <div className="table-container">
-          <div className="table-header">
-            <div className="search-bar">
-              <Search size={20} />
-              <input type="text" placeholder="Search vehicles..." />
-            </div>
-            <button className="filter-button">
-              <Filter size={20} />
-              Filter
-            </button>
-          </div>
-
-          <table className="vehicles-table">
-            <thead>
-              <tr>
-                <th>Vehicle Name</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Last Updated</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {vehicles.map((vehicle) => (
-                <tr key={vehicle.id}>
-                  <td>{vehicle.name}</td>
-                  <td>{vehicle.price}</td>
-                  <td>
-                    <span className={`status-badge ${vehicle.status.toLowerCase()}`}>
-                      {vehicle.status}
-                    </span>
-                  </td>
-                  <td>{vehicle.lastUpdated}</td>
-                  <td>
-                    <div className="action-buttons">
-                      <button className="action-btn edit">
-                        <Edit size={16} />
-                      </button>
-                      <button className="action-btn delete">
-                        <Trash size={16} />
-                      </button>
-                      <button className="action-btn more">
-                        <MoreVertical size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </main>
+      </div>
     </div>
   );
 };

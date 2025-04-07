@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
-import { Filter, ChevronDown, Car, Fuel, Settings, DollarSign, Calendar } from 'lucide-react';
+import { Filter, ChevronDown, Car, Fuel, Settings, Calendar, DollarSign, Scale } from 'lucide-react';
 import ViewDetails from './ViewDetails';
+import CompareModal from './CompareModal';
 import "../assets/NewCars.css";
 
 const NewCars = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedCar, setSelectedCar] = useState(null);
+  const [compareList, setCompareList] = useState([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
+
+  const toggleCompare = (car) => {
+    if (compareList.find(c => c.id === car.id)) {
+      setCompareList(compareList.filter(c => c.id !== car.id));
+    } else if (compareList.length < 3) {
+      setCompareList([...compareList, car]);
+    }
+  };
 
   const cars = [
     {
@@ -84,8 +95,200 @@ const NewCars = () => {
       mileage:"683 mile range",
       engine:"Electric",
       transmission:"Automatic"
+    },
+     // New cars added below
+     {
+      id: 8,
+      name: "2024 Tesla Model S",
+      image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "89,990",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "405 mile range",
+      engine: "Dual Motor",
+      transmission: "Single-speed"
+    },
+    {
+      id: 9,
+      name: "2024 Lexus RX",
+      image: "https://images.unsplash.com/photo-1619682817481-e994891cd1f5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "70,000",
+      type: "SUV",
+      fuel: "Hybrid",
+      mileage: "31/28",
+      engine: "2.5L 4-cylinder",
+      transmission: "CVT"
+    },
+    {
+      id: 10,
+      name: "2024 Genesis G80",
+      image: "https://images.unsplash.com/photo-1583121274602-3e2820c69888?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "55,000",
+      type: "Sedan",
+      fuel: "Gasoline",
+      mileage: "23/32",
+      engine: "2.5L 4-cylinder",
+      transmission: "8-speed automatic"
+    },
+    {
+      id: 11,
+      name: "2024 Rivian R1S",
+      image: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "78,000",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "316 mile range",
+      engine: "Quad Motor",
+      transmission: "Single-speed"
+    },
+    {
+      id: 12,
+      name: "2024 Range Rover Sport",
+      image: "https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "83,000",
+      type: "SUV",
+      fuel: "Hybrid",
+      mileage: "19/26",
+      engine: "3.0L 6-cylinder",
+      transmission: "8-speed automatic"
+    },
+    {
+      id: 13,
+      name: "2024 Volvo XC90",
+      image: "https://images.unsplash.com/photo-1619551734325-81aaf323686c?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "57,000",
+      type: "SUV",
+      fuel: "Hybrid",
+      mileage: "27/28",
+      engine: "2.0L 4-cylinder",
+      transmission: "8-speed automatic"
+    },
+    {
+      id: 14,
+      name: "2024 Lucid Air",
+      image: "https://images.unsplash.com/photo-1619767886558-efdc259b6e09?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "87,400",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "516 mile range",
+      engine: "Dual Motor",
+      transmission: "Single-speed"
+    },
+    {
+      id: 15,
+      name: "2024 Maserati Ghibli",
+      image: "https://images.unsplash.com/photo-1617654112368-307921291f42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "79,000",
+      type: "Sedan",
+      fuel: "Gasoline",
+      mileage: "18/25",
+      engine: "3.0L V6",
+      transmission: "8-speed automatic"
+    },
+    {
+      id: 16,
+      name: "2024 Polestar 2",
+      image: "https://images.unsplash.com/photo-1619767886558-efdc259b6e09?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "49,800",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "270 mile range",
+      engine: "Dual Motor",
+      transmission: "Single-speed"
+    },
+    {
+      id: 17,
+      name: "2024 Audi RS e-tron GT",
+      image: "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1000",
+      price: "145,900",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "232 mile range",
+      engine: "Dual Motor",
+      transmission: "2-speed"
+    },
+    {
+      id: 18,
+      name: "2024 BMW i7",
+      image: "https://images.unsplash.com/photo-1617654112368-307921291f42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "119,300",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "318 mile range",
+      engine: "Dual Motor",
+      transmission: "Single-speed"
+    },
+    {
+      id: 19,
+      name: "2024 Mercedes-AMG GT 63",
+      image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=1000",
+      price: "142,600",
+      type: "Sedan",
+      fuel: "Gasoline",
+      mileage: "16/21",
+      engine: "4.0L V8",
+      transmission: "9-speed automatic"
+    },
+    {
+      id: 20,
+      name: "2024 Porsche Panamera",
+      image: "https://images.unsplash.com/photo-1580274455191-1c62238fa333?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "92,400",
+      type: "Sedan",
+      fuel: "Hybrid",
+      mileage: "22/29",
+      engine: "2.9L V6",
+      transmission: "8-speed automatic"
+    },
+    {
+      id: 21,
+      name: "2024 Rolls-Royce Spectre",
+      image: "https://images.unsplash.com/photo-1617654112368-307921291f42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "413,000",
+      type: "Electric",
+      fuel: "Electric",
+      mileage: "260 mile range",
+      engine: "Dual Motor",
+      transmission: "Single-speed"
+    },
+    {
+      id: 22,
+      name: "2024 Bentley Flying Spur",
+      image: "https://images.unsplash.com/photo-1617654112368-307921291f42?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "215,000",
+      type: "Sedan",
+      fuel: "Hybrid",
+      mileage: "19/25",
+      engine: "4.0L V8",
+      transmission: "8-speed automatic"
+    },
+    {
+      id: 23,
+      name: "2024 Lamborghini Revuelto",
+      image: "https://images.unsplash.com/photo-1632245889029-e406faaa34bc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "608,000",
+      type: "Supercar",
+      fuel: "Hybrid",
+      mileage: "11/14",
+      engine: "6.5L V12 Hybrid",
+      transmission: "8-speed dual-clutch"
+    },
+    {
+      id: 24,
+      name: "2024 Ferrari SF90 Stradale",
+      image: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      price: "524,815",
+      type: "Supercar",
+      fuel: "Hybrid",
+      mileage: "16/19",
+      engine: "4.0L V8 Hybrid",
+      transmission: "8-speed dual-clutch"
     }
   ];
+
+  const filteredCars = activeFilter === 'all'
+    ? cars
+    : cars.filter(car => car.type.toLowerCase() === activeFilter);
 
   return (
     <div className="new-cars-container">
@@ -153,13 +356,46 @@ const NewCars = () => {
         </div>
       </div>
 
+      {/* Compare Bar */}
+      {compareList.length > 0 && (
+        <div className="compare-bar">
+          <div className="compare-cars">
+            {compareList.map(car => (
+              <div key={car.id} className="compare-car-item">
+                <img src={car.image} alt={car.name} />
+                <button onClick={() => toggleCompare(car)} className="remove-compare">×</button>
+              </div>
+            ))}
+            {Array(3 - compareList.length).fill(null).map((_, i) => (
+              <div key={`empty-${i}`} className="compare-car-item empty">
+                <div className="empty-slot">Add Car</div>
+              </div>
+            ))}
+          </div>
+          <button 
+            className="compare-button"
+            onClick={() => setShowCompareModal(true)}
+            disabled={compareList.length < 2}
+          >
+            <Scale size={20} />
+            Compare ({compareList.length}/3)
+          </button>
+        </div>
+      )}
+
       {/* Cars Grid */}
       <div className="cars-grid-container">
-        {cars.map(car => (
+        {filteredCars.map(car => (
           <div key={car.id} className="car-card">
             <div className="car-image">
               <img src={car.image} alt={car.name} />
               <div className="car-type">{car.type}</div>
+              <button 
+                className={`compare-toggle ${compareList.includes(car) ? 'active' : ''}`}
+                onClick={() => toggleCompare(car)}
+              >
+                {compareList.includes(car) ? 'Remove from Compare' : 'Add to Compare'}
+              </button>
             </div>
             
             <div className="car-content">
@@ -205,9 +441,16 @@ const NewCars = () => {
           onClose={() => setSelectedCar(null)}
         />
       )}
+
+      {/* Compare Modal */}
+      {showCompareModal && (
+        <CompareModal 
+          cars={compareList}
+          onClose={() => setShowCompareModal(false)}
+        />
+      )}
     </div>
   );
-}
+};
 
 export default NewCars;
-

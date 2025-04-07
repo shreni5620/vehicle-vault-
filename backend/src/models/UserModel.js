@@ -29,6 +29,7 @@ const userSchema = new Schema({
     confirmPassword: {
         type: String,
     }
+   
 
 })
 

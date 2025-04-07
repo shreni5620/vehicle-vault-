@@ -13,7 +13,7 @@ const AdminLogin = () => {
     // Mock login - replace with actual authentication
     if (credentials.email === 'admin@vehiclevault.com' && credentials.password === 'admin123') {
       localStorage.setItem('adminToken', 'mock-token');
-      navigate('/admin/dashboard');
+      navigate('/admin');
     } else {
       setError('Invalid credentials');
     }

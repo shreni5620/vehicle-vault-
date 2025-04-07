@@ -11,3 +11,5 @@ logo color
 login user:
 Email:shrenibenpatel22@gnu.ac.in
 Password:123456
+
+backend run: nodemon index.js

@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, Car, Award, Shield, Clock, TrendingUp, ChevronRight } from 'lucide-react';
 import "../assets/Home.css";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -65,7 +68,7 @@ const Home = () => {
       <div className="featured-section">
         <div className="section-header">
           <h2>Featured Vehicles</h2>
-          <button className="view-all-button">
+          <button className="view-all-button" onClick={() => navigate('/login')}>
             View All <ChevronRight size={20} />
           </button>
         </div>
