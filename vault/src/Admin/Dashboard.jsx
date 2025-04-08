@@ -1,6 +1,6 @@
 import React from 'react';
 import { Users, Car, FileText, TrendingUp, DollarSign, Star, Calendar, AlertCircle } from 'lucide-react';
-import "../assets/Dashboard.css";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const stats = [

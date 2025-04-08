@@ -27,7 +27,7 @@ const LoginForm = () => {
 
       if (response.data.error === false) {
         alert(response.data.message);
-        navigate('/');
+        navigate('/dashboard');
       } else {
         setError(response.data.message);
       }

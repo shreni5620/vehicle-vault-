@@ -1,37 +1,21 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Heart, Share2, Car, Star, AlertCircle, Clock3, Trash2 } from 'lucide-react';
+import { useWishlist } from "./WishlistContext";
 import "../assets/Wishlist.css";
 
 const Wishlist = () => {
-  const [wishlistItems, setWishlistItems] = useState([
-    {
-      id: 1,
-      name: "BMW X5",
-      price: "$65,000",
-      image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=2070&q=80",
-      specs: {
-        year: 2024,
-        mileage: "25 mpg",
-        fuelType: "Petrol",
-      },
-      dateAdded: "2024-03-15",
-    },
-    {
-      id: 2,
-      name: "Mercedes-Benz GLE",
-      price: "$75,000",
-      image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=2070&q=80",
-      specs: {
-        year: 2024,
-        mileage: "28 mpg",
-        fuelType: "Hybrid",
-      },
-      dateAdded: "2024-03-14",
-    },
-  ]);
+  const { wishlistItems, removeFromWishlist } = useWishlist();
 
-  const removeFromWishlist = (id) => {
-    setWishlistItems((items) => items.filter((item) => item.id !== id));
+  const handleShare = (item) => {
+    if (navigator.share) {
+      navigator.share({
+        title: item.name,
+        text: `Check out this ${item.name} priced at $${item.price}`,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      alert('Sharing is not supported on this browser');
+    }
   };
 
   return (
@@ -45,38 +29,47 @@ const Wishlist = () => {
 
       {wishlistItems.length > 0 ? (
         <div className="wishlist-grid">
-          {wishlistItems.map((item) => (
-            <div key={item.id} className="wishlist-card">
+          {wishlistItems.map((car) => (
+            <div key={car.id} className="wishlist-card">
               <div className="car-image">
-                <img src={item.image} alt={item.name} />
+                <img src={car.image} alt={car.name} />
                 <div className="card-actions">
-                  <button className="action-btn share">
+                  <button 
+                    className="action-btn share"
+                    onClick={() => handleShare(car)}
+                    aria-label="Share vehicle"
+                  >
                     <Share2 size={20} />
                   </button>
-                  <button className="action-btn remove" onClick={() => removeFromWishlist(item.id)}>
+                  <button 
+                    className="action-btn remove"
+                    onClick={() => removeFromWishlist(car.id)}
+                    aria-label="Remove from wishlist"
+                  >
                     <Trash2 size={20} />
                   </button>
                 </div>
               </div>
               <div className="car-info">
-                <h2>{item.name}</h2>
-                <p className="price">{item.price}</p>
+                <h2>{car.name}</h2>
+                <p className="price">${car.price.toLocaleString()}</p>
                 <div className="specs">
                   <div>
                     <Clock3 className="icon" />
-                    <span>{item.specs.year}</span>
+                    <span>{car.year}</span>
                   </div>
                   <div>
                     <AlertCircle className="icon" />
-                    <span>{item.specs.mileage}</span>
+                    <span>{car.mileage}</span>
                   </div>
                   <div>
                     <Star className="icon" />
-                    <span>{item.specs.fuelType}</span>
+                    <span>{car.fuel}</span>
                   </div>
                 </div>
-                <div className="date-added">Added on {new Date(item.dateAdded).toLocaleDateString()}</div>
-                <button className="details-btn">View Details</button>
+                <div className="date-added">
+                  Added on {new Date(car.dateAdded).toLocaleDateString()}
+                </div>
               </div>
             </div>
           ))}

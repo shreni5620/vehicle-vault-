@@ -7,6 +7,7 @@ const UsedCars = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
+  const [favorites, setFavorites] = useState([]);
   const [filters, setFilters] = useState({
     priceRange: { min: 0, max: 100000 },
     brand: 'all',
@@ -324,6 +325,15 @@ const UsedCars = () => {
     }
   ];
 
+  const toggleFavorite = (carId) => {
+    setFavorites(prev => 
+      prev.includes(carId) 
+        ? prev.filter(id => id !== carId)
+        : [...prev, carId]
+    );
+  };
+  
+
   const ViewDetailsModal = ({ car, onClose }) => (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
@@ -582,9 +592,19 @@ const UsedCars = () => {
           <div key={car.id} className="car-card">
             <div className="car-image">
               <img src={car.image} alt={car.name} />
-              <button className="favorite-button">
-                <Heart size={20} />
+              <button 
+                 className={"favorite-button ${favorites.includes(car.id) ? 'active' : ''}"}
+                 onClick={(e) => {
+                  e.preventDefault();
+                  toggleFavorite(car.id);
+                }}   
+              >
+                <Heart
+                 size={20}
+                 fill={favorites.includes(car.id) ? "#ff4444" :"none"} 
+                />
               </button>
+
               {car.verified && (
                 <div className="verified-badge">
                   Certified
