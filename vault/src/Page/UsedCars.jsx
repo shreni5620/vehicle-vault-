@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Filter, MapPin, Calendar, Car, Fuel, Settings, DollarSign, ChevronDown, Heart, X, Star, Shield, Gauge, Radio, Box, Users, ThumbsUp, AlertTriangle } from 'lucide-react';
 import Accessory from './Accessory';
 import "../assets/UsedCars.css";
+import { useWishlist } from "./WishlistContext";
 
 const UsedCars = () => {
   const [activeFilter, setActiveFilter] = useState('all');
@@ -18,6 +19,7 @@ const UsedCars = () => {
     mileage: 'all',
     owners: 'all'
   });
+  const { addToWishlist, removeFromWishlist, wishlistItems } = useWishlist();
 
   const usedCars = [
     {
@@ -325,12 +327,27 @@ const UsedCars = () => {
     }
   ];
 
-  const toggleFavorite = (carId) => {
-    setFavorites(prev => 
-      prev.includes(carId) 
-        ? prev.filter(id => id !== carId)
-        : [...prev, carId]
-    );
+  const toggleFavorite = async (car) => {
+    try {
+      if (wishlistItems.some(item => item.id === car.id)) {
+        await removeFromWishlist(car.id);
+      } else {
+        // Add complete car data to wishlist
+        await addToWishlist({
+          id: car.id,
+          name: car.name,
+          price: car.price,
+          image: car.image,
+          year: car.year,
+          mileage: car.mileage,
+          fuel: car.fuel,
+          location: car.location,
+          dateAdded: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling wishlist:', error);
+    }
   };
   
 
@@ -593,15 +610,15 @@ const UsedCars = () => {
             <div className="car-image">
               <img src={car.image} alt={car.name} />
               <button 
-                 className={"favorite-button ${favorites.includes(car.id) ? 'active' : ''}"}
-                 onClick={(e) => {
+                className={`favorite-button ${wishlistItems.some(item => item.id === car.id) ? 'active' : ''}`}
+                onClick={(e) => {
                   e.preventDefault();
-                  toggleFavorite(car.id);
+                  toggleFavorite(car);
                 }}   
               >
                 <Heart
-                 size={20}
-                 fill={favorites.includes(car.id) ? "#ff4444" :"none"} 
+                  size={20}
+                  fill={wishlistItems.some(item => item.id === car.id) ? "#ff4444" : "none"} 
                 />
               </button>
 

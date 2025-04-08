@@ -37,6 +37,12 @@ app.use("/review",reviewRoutes)
 const otpRoutes = require("./src/routes/OtpRoutes")
 app.use("/otp",otpRoutes)
 
+const wishlistRoutes = require("./src/routes/WishlistRoutes")
+app.use("/wishlist",wishlistRoutes)
+
+const adminRoutes = require("./src/routes/AdminRoutes")
+app.use("/admin", adminRoutes)
+
 mongoose.connect("mongodb://127.0.0.1:27017/vehicle_vault").then(()=>{
     console.log("database connected....")
 })

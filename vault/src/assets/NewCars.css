@@ -535,3 +535,38 @@
     height: 100px;
   }
 }
+
+/* Add these styles to your existing NewCars.css */
+.favorite-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  z-index: 2;
+}
+
+.favorite-button:hover {
+  transform: scale(1.1);
+}
+
+.favorite-button.active {
+  color: #ef4444;
+}
+
+.favorite-button.active svg {
+  color: #ef4444;
+}
+
+.car-image {
+  position: relative;
+}
