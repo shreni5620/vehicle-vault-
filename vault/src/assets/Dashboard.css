@@ -187,22 +187,33 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #ef4444;
     border-radius: 8px;
     background-color: white;
-    color: #4b5563;
+    color: #ef4444;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
   }
   
   .logout-button:hover {
-    background-color: #f3f4f6;
+    background-color: #ef4444;
+    color: white;
+  }
+  
+  .logout-button .icon {
+    transition: transform 0.2s;
+  }
+  
+  .logout-button:hover .icon {
+    transform: translateX(2px);
   }
   
   /* Main Content Area */
   .main-content {
     flex: 1;
     padding: 32px;
+    overflow-y: auto;
+    background-color: #f9fafb;
   }
   
   .main-content h1 {
@@ -409,4 +420,147 @@
   
   .coming-soon p {
     color: #6b7280;
+  }
+  
+  /* Accessories Section */
+  .accessories-section {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+  }
+  
+  .accessories-section h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: #1f2937;
+  }
+  
+  /* Ensure the accessories grid fits well */
+  .accessories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+  }
+  
+  /* Make cards consistent with dashboard style */
+  .accessory-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .accessory-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style category buttons to match dashboard */
+  .category-button {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    color: #4b5563;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .category-button.active {
+    background-color: #2563eb;
+    color: white;
+    border-color: #2563eb;
+  }
+  
+  /* Add to cart button styling */
+  .add-to-cart {
+    background-color: #e86c4c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .add-to-cart:hover {
+    background-color: #d65c3c;
+  }
+  
+  /* Logout Confirmation Styles */
+  .logout-confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .logout-confirmation-modal {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+  }
+  
+  .logout-confirmation-modal h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #1f2937;
+  }
+  
+  .logout-confirmation-modal p {
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+  
+  .logout-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+  
+  .logout-buttons button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .logout-buttons .confirm-button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+  }
+  
+  .logout-buttons .confirm-button:hover {
+    background-color: #dc2626;
+  }
+  
+  .logout-buttons .cancel-button {
+    background-color: #e5e7eb;
+    color: #4b5563;
+    border: none;
+  }
+  
+  .logout-buttons .cancel-button:hover {
+    background-color: #d1d5db;
   }

@@ -1,45 +1,45 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_ENDPOINTS } from '../config/api';
 
 // Create context without type annotation
 const WishlistContext = createContext();
 
-const API_URL = 'http://localhost:3000'; // Removed /api/wishlist since it's already in the routes
-
 export function WishlistProvider({ children }) {
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
-  // You should get the actual userId from your authentication system
-  // For now, we'll use a dummy userId for testing
-  const userId = localStorage.getItem('userId') || '123'; // Replace with actual user authentication
-
-  useEffect(() => {
-    fetchWishlistItems();
-  }, []);
+  // Get userId from localStorage or implement proper auth
+  const userId = localStorage.getItem('userId') || '123';
 
   const fetchWishlistItems = async () => {
     try {
-      const response = await axios.get(`${API_URL}/wishlist/wishlist`, {
+      setLoading(true);
+      const response = await axios.get(API_ENDPOINTS.WISHLIST, {
         params: { userId }
       });
-      if (!response.data.error) {
-        setWishlistItems(response.data.items);
-      }
+      setWishlistItems(response.data.items || []);
+      setError(null);
     } catch (error) {
       console.error('Error fetching wishlist:', error);
+      setError('Failed to fetch wishlist items');
+    } finally {
+      setLoading(false);
     }
   };
 
   const addToWishlist = async (carData) => {
     try {
-      const response = await axios.post(`${API_URL}/wishlist/wishlist/add`, {
+      const response = await axios.post(API_ENDPOINTS.WISHLIST_ADD, {
         userId,
         vehicleId: carData.id,
-        carData // Send complete car data
+        carData
       });
       if (!response.data.error) {
         setWishlistItems(prev => [...prev, carData]);
       }
+      return response.data;
     } catch (error) {
       console.error('Error adding to wishlist:', error);
       throw error;
@@ -49,24 +49,31 @@ export function WishlistProvider({ children }) {
   const removeFromWishlist = async (vehicleId) => {
     try {
       const response = await axios.delete(
-        `${API_URL}/wishlist/wishlist/remove/${vehicleId}`,
+        `${API_ENDPOINTS.WISHLIST_REMOVE}/${vehicleId}`,
         { data: { userId } }
       );
       if (!response.data.error) {
         setWishlistItems(prev => prev.filter(item => item.id !== vehicleId));
       }
+      return response.data;
     } catch (error) {
       console.error('Error removing from wishlist:', error);
       throw error;
     }
   };
 
+  useEffect(() => {
+    fetchWishlistItems();
+  }, []);
+
   return (
     <WishlistContext.Provider 
       value={{
         wishlistItems,
         addToWishlist,
-        removeFromWishlist
+        removeFromWishlist,
+        loading,
+        error
       }}
     >
       {children}

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import "../assets/Navbar.css";
+import NotificationCenter from "../Page/NotificationCenter";
 
 const Navbar = () => {
   return (
@@ -16,6 +17,7 @@ const Navbar = () => {
       </div>
 
       <div className="auth-buttons">
+        <NotificationCenter />
         <Link to="/favorites" className="favorites-link">
           <Heart size={20} className="heart-icon"/>
         </Link>
@@ -28,12 +30,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
-
-
-
-

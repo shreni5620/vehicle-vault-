@@ -1,9 +1,17 @@
 const express = require("express") //express....
 const mongoose = require("mongoose")
 const cors = require("cors")
+require('dotenv').config();
 //express object..
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin: "http://localhost:5173", //frontend url
+    credentials: true, 
+}))
+app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+});
 app.use(express.json()) //to accept data as json...
 
 //userRoutes
@@ -40,16 +48,20 @@ app.use("/otp",otpRoutes)
 const wishlistRoutes = require("./src/routes/WishlistRoutes")
 app.use("/wishlist",wishlistRoutes)
 
-const adminRoutes = require("./src/routes/AdminRoutes")
-app.use("/admin", adminRoutes)
 
 mongoose.connect("mongodb://127.0.0.1:27017/vehicle_vault").then(()=>{
-    console.log("database connected....")
+    console.log("Connected to MongoDB")
 })
-
+.catch((err) => console.error("MongoDB connection error:", err));
 
 //server creation...
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{
-    console.log("server started on port number ",PORT)
+    console.log(`Server is running on port ${PORT}`)
 })
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: true, message: 'Something went wrong!' });
+});

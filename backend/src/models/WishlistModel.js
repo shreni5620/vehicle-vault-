@@ -10,19 +10,17 @@ const wishlistSchema = new mongoose.Schema({
     required: true 
   },
   carData: {
-    name: String,
-    price: Number,
-    image: String,
-    year: String,
-    mileage: String,
-    fuel: String,
-    location: String,
-    dateAdded: {
-      type: Date,
-      default: Date.now
-    }
+    type: Object,
+    required: true
+  },
+  dateAdded: {
+    type: Date,
+    default: Date.now
   }
 });
+
+// Compound index to ensure a user can't add the same car twice
+wishlistSchema.index({ userId: 1, vehicleId: 1 }, { unique: true });
 
 const Wishlist = mongoose.model('Wishlist', wishlistSchema);
 

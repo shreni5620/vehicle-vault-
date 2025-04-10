@@ -1,19 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Package, Heart, Clock, Car, Warehouse, Settings, Settings2, LogOut, Edit2, X, Check, MapPin, FileText } from 'lucide-react';
 import '../assets/Dashboard.css';
+import Accessory from './Accessory';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
-  const [user, setUser] = useState({
-    name: '',
-    phone: '',
-    email: ''
+  const navigate = useNavigate();
+
+  // Update initial state to use stored user info
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('userInfo');
+    return storedUser ? JSON.parse(storedUser) : {
+      name: '',
+      email: '',
+      phone: '',
+      vehicle: {
+        type: 'SUV',
+        model: 'X5',
+        year: '2023'
+      }
+    };
   });
+
+  // Add authentication check
+  useEffect(() => {
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const [activeSection, setActiveSection] = useState('orders');
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState({ ...user });
   const [address, setAddress] = useState('');
   const [documents, setDocuments] = useState([]);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const menuItems = [
     { icon: Package, text: 'My Orders', id: 'orders' },
@@ -21,6 +43,7 @@ function Dashboard() {
     { icon: Clock, text: 'My Activity', id: 'activity' },
     { icon: Car, text: 'My Vehicles', id: 'vehicles' },
     { icon: Warehouse, text: 'My Garage', id: 'garage' },
+    { icon: Package, text: 'Accessories', id: 'accessories' },
     { icon: Settings2, text: 'Manage Consents', id: 'consents' },
     { icon: Settings, text: 'Profile Settings', id: 'settings' },
   ];
@@ -60,6 +83,52 @@ function Dashboard() {
       setDocuments([...documents, { name: file.name, type: file.type }]);
     }
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userInfo');
+    navigate('/');
+  };
+
+  const confirmLogout = () => {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userInfo');
+    
+    setUser({
+      name: '',
+      phone: '',
+      email: '',
+      vehicle: {
+        type: '',
+        model: '',
+        year: ''
+      }
+    });
+
+    navigate('/admin');
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false);
+  };
+
+  const LogoutConfirmation = () => (
+    <div className="logout-confirmation-overlay">
+      <div className="logout-confirmation-modal">
+        <h3>Confirm Logout</h3>
+        <p>Are you sure you want to logout?</p>
+        <div className="logout-buttons">
+          <button className="confirm-button" onClick={confirmLogout}>
+            Yes, Logout
+          </button>
+          <button className="cancel-button" onClick={cancelLogout}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   const renderContent = () => {
     switch (activeSection) {
@@ -135,6 +204,39 @@ function Dashboard() {
                   )}
                 </div>
               </div>
+
+              <div className="settings-card">
+                <h3>Vehicle Information</h3>
+                <div className="profile-form">
+                  <div className="form-group">
+                    <label>Vehicle Type</label>
+                    <select 
+                      value={user.vehicle?.type || ''} 
+                      onChange={(e) => setUser(prev => ({
+                        ...prev, 
+                        vehicle: { ...prev.vehicle, type: e.target.value }
+                      }))}
+                    >
+                      <option value="SUV">SUV</option>
+                      <option value="Sedan">Sedan</option>
+                      <option value="Luxury">Luxury</option>
+                      <option value="Sports">Sports</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Vehicle Model</label>
+                    <input 
+                      type="text" 
+                      value={user.vehicle?.model || ''} 
+                      onChange={(e) => setUser(prev => ({
+                        ...prev, 
+                        vehicle: { ...prev.vehicle, model: e.target.value }
+                      }))}
+                      placeholder="Enter vehicle model"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -161,6 +263,17 @@ function Dashboard() {
               </div>
             </div>
           </>
+        );
+      
+      case 'accessories':
+        return (
+          <div className="accessories-section">
+            <h1>Vehicle Accessories</h1>
+            <Accessory 
+              carType={user.vehicle?.type || "SUV"} 
+              carModel={user.vehicle?.model || "X5"} 
+            />
+          </div>
         );
       
       default:
@@ -268,7 +381,7 @@ function Dashboard() {
         </nav>
 
         {/* Logout Button */}
-        <button className="logout-button">
+        <button className="logout-button" onClick={handleLogout}>
           <LogOut className="icon" />
           <span>Logout</span>
         </button>
@@ -278,6 +391,9 @@ function Dashboard() {
       <div className="main-content">
         {renderContent()}
       </div>
+
+      {/* Add Logout Confirmation Dialog */}
+      {showLogoutConfirm && <LogoutConfirmation />}
     </div>
   );
 }

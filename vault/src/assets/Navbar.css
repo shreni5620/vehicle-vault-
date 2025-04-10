@@ -98,3 +98,51 @@
   color: white;
 }
 
+.nav-auth {
+  display: flex;
+  align-items: center;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  background-color: #f3f4f6;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.profile-button:hover {
+  background-color: #e5e7eb;
+}
+
+.profile-button .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #e86c4c;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.login-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #e86c4c;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.login-button:hover {
+  background-color: #d65c3c;
+}
+
